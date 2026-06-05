@@ -14,6 +14,9 @@ jobs:
   sonarcloud:
     name: Build and analyze with SonarCloud
     runs-on: ubuntu-latest
+
+    # Avoid running SonarCloud on pull requests from forks.
+    # Forked PRs do not have access to SONAR_TOKEN.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
     steps:
@@ -26,7 +29,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '23'
           cache: maven
 
       - name: Show Java and Maven versions
@@ -47,8 +50,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=YOUR_SONARCLOUD_ORGANIZATION_KEY
-            -Dsonar.projectKey=YOUR_SONARCLOUD_PROJECT_KEY
+            -Dsonar.organization=research-projects-all
+            -Dsonar.projectKey=research-projects-all_initializr
             -Dsonar.sources=.
             -Dsonar.java.binaries=**/target/classes
             -Dsonar.exclusions=**/target/**,**/.mvn/**,**/mvnw,**/mvnw.cmd
