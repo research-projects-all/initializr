@@ -29,15 +29,11 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Compile all Maven projects
+      - name: Compile Maven reactor
         shell: bash
         run: |
           set -euo pipefail
-
-          find . -name pom.xml -not -path '*/target/*' | sort | while read -r pom; do
-            echo "Compiling $(dirname "$pom")"
-            mvn -B -q -f "$pom" -DskipTests clean compile
-          done
+          mvn -B -DskipTests clean compile
 
       - name: SonarCloud scan
         uses: SonarSource/sonarqube-scan-action@v8.1.0
