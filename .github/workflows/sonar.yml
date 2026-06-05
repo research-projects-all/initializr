@@ -22,18 +22,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
           cache: maven
+
+      - name: Show Java and Maven versions
+        shell: bash
+        run: |
+          java -version
+          ./mvnw -version
 
       - name: Compile Maven reactor
         shell: bash
         run: |
           set -euo pipefail
-          mvn -B -DskipTests clean compile
+          ./mvnw -B -e -DskipTests clean compile
 
       - name: SonarCloud scan
         uses: SonarSource/sonarqube-scan-action@v8.1.0
